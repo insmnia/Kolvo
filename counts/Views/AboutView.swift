@@ -24,6 +24,8 @@ struct AboutView: View {
 
                     Spacer()
 
+                    privacyLink
+
                     footer
                 }
                 .padding()
@@ -78,12 +80,27 @@ struct AboutView: View {
         .animation(Theme.gentleSpring.delay(0.15), value: appeared)
     }
 
+    private var privacyLink: some View {
+        Button {
+            if let url = URL(string: "https://yourusername.github.io/counts/privacy-policy.html") {
+                UIApplication.shared.open(url)
+            }
+        } label: {
+            Text("Privacy Policy")
+                .font(.subheadline)
+                .foregroundStyle(Theme.textSecondary)
+                .underline(color: Theme.textTertiary)
+        }
+        .opacity(appeared ? 1 : 0)
+        .animation(Theme.gentleSpring.delay(0.2), value: appeared)
+    }
+
     private var footer: some View {
         Text("Made with care")
             .font(.caption)
             .foregroundStyle(Theme.textTertiary)
             .opacity(appeared ? 1 : 0)
-            .animation(Theme.gentleSpring.delay(0.2), value: appeared)
+            .animation(Theme.gentleSpring.delay(0.25), value: appeared)
     }
 }
 

@@ -1,6 +1,6 @@
 //
 //  Theme.swift
-//  counts
+//  Kolvo
 //
 
 import SwiftUI

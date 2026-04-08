@@ -1,6 +1,6 @@
 //
 //  CounterDetailView.swift
-//  counts
+//  Kolvo
 //
 
 import SwiftUI

@@ -1,6 +1,6 @@
 //
 //  CounterDetailViewModel.swift
-//  counts
+//  Kolvo
 //
 
 import Foundation

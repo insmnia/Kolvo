@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  counts
+//  Kolvo
 //
 //  Created by Yaraslau Blonski on 3.02.26.
 //

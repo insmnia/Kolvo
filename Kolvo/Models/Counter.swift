@@ -1,11 +1,11 @@
 //
 //  Counter.swift
-//  counts
+//  Kolvo
 //
 
 import Foundation
 
-struct Counter: Identifiable, Codable {
+struct Counter: Identifiable, Codable, Hashable {
     let id: UUID
     var name: String
     var type: CounterType

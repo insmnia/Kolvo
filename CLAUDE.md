@@ -1,4 +1,4 @@
-# Counts - iOS App
+# Kolvo - iOS App
 
 ## Developer Contact
 
@@ -25,7 +25,7 @@ A minimal iOS app for tracking meaningful numbers calmly. No streaks, goals, cha
 
 ```
 counts/
-├── countsApp.swift              # App entry point, injects CountersViewModel
+├── KolvoApp.swift               # App entry point, injects CountersViewModel
 ├── ContentView.swift            # Root view, displays HomeView
 ├── Models/
 │   └── Counter.swift            # Data model, CounterType, TimeUnit enums
@@ -60,7 +60,7 @@ struct Counter: Identifiable, Codable {
 ```
 
 ### CounterType
-- `.auto` - Counts elapsed time from startDate
+- `.auto` - Tracks elapsed time from startDate
 - `.manual` - User taps to increment
 
 ### TimeUnit

@@ -1,6 +1,6 @@
 //
 //  CreateCounterView.swift
-//  counts
+//  Kolvo
 //
 
 import SwiftUI
@@ -108,7 +108,7 @@ struct CreateCounterView: View {
                             Text(type.displayName)
                                 .font(.subheadline.weight(.medium))
 
-                            Text(type == .auto ? "Counts time" : "Tap to count")
+                            Text(type == .auto ? "Tracks time" : "Tap to count")
                                 .font(.caption)
                                 .foregroundStyle(Theme.textTertiary)
                         }

@@ -1,6 +1,6 @@
 //
 //  AboutView.swift
-//  counts
+//  Kolvo
 //
 
 import SwiftUI
@@ -51,7 +51,7 @@ struct AboutView: View {
 
     private var appInfo: some View {
         VStack(spacing: 12) {
-            Text("Counts")
+            Text("Kolvo")
                 .font(.system(size: 32, weight: .semibold, design: .rounded))
                 .foregroundStyle(Theme.textPrimary)
 
@@ -82,7 +82,7 @@ struct AboutView: View {
 
     private var privacyLink: some View {
         Button {
-            if let url = URL(string: "https://yourusername.github.io/counts/privacy-policy.html") {
+            if let url = URL(string: "https://insmnia.github.io/kolvo/privacy-policy.html") {
                 UIApplication.shared.open(url)
             }
         } label: {

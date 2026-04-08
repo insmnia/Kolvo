@@ -1,6 +1,6 @@
 //
 //  CounterCardView.swift
-//  counts
+//  Kolvo
 //
 
 import SwiftUI

@@ -1,6 +1,6 @@
 //
 //  HomeView.swift
-//  counts
+//  Kolvo
 //
 
 import SwiftUI
@@ -8,9 +8,12 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject private var viewModel: CountersViewModel
 
+    @State private var showListView = false
     @State private var showCreateSheet = false
     @State private var showLimitSheet = false
     @State private var showAboutSheet = false
+    @State private var selectedIndex = 0
+    @State private var detailCounter: Counter?
 
     var body: some View {
         NavigationStack {
@@ -18,15 +21,19 @@ struct HomeView: View {
                 Theme.background
                     .ignoresSafeArea()
 
-                Group {
-                    if viewModel.counters.isEmpty {
-                        emptyStateView
-                    } else {
-                        countersList
-                    }
+                if viewModel.counters.isEmpty {
+                    emptyStateView
+                        .transition(.opacity)
+                } else if showListView {
+                    listView
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                } else {
+                    pagerView
+                        .transition(.opacity.combined(with: .scale(scale: 0.95)))
                 }
             }
-            .navigationTitle("Counts")
+            .navigationTitle(showListView ? "Kolvo" : "")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
@@ -37,7 +44,18 @@ struct HomeView: View {
                     }
                 }
 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    if !viewModel.counters.isEmpty {
+                        Button {
+                            withAnimation(Theme.gentleSpring) {
+                                showListView.toggle()
+                            }
+                        } label: {
+                            Image(systemName: showListView ? "circle.grid.cross" : "list.bullet")
+                                .foregroundStyle(Theme.textSecondary)
+                        }
+                    }
+
                     Button {
                         if viewModel.canAddCounter {
                             showCreateSheet = true
@@ -53,6 +71,7 @@ struct HomeView: View {
             .sheet(isPresented: $showCreateSheet) {
                 CreateCounterView { counter in
                     viewModel.add(counter: counter)
+                    selectedIndex = viewModel.counters.count - 1
                 }
             }
             .sheet(isPresented: $showLimitSheet) {
@@ -61,22 +80,49 @@ struct HomeView: View {
             .sheet(isPresented: $showAboutSheet) {
                 AboutView()
             }
+            .navigationDestination(item: $detailCounter) { counter in
+                CounterDetailView(
+                    counter: counter,
+                    onUpdate: { updated in
+                        viewModel.update(counter: updated)
+                    },
+                    onDelete: { deleted in
+                        withAnimation(Theme.gentleSpring) {
+                            viewModel.delete(counter: deleted)
+                        }
+                    }
+                )
+            }
         }
     }
 
-    private var emptyStateView: some View {
-        VStack(spacing: 16) {
-            Text("No counters yet")
-                .font(.headline)
-                .foregroundStyle(Theme.textSecondary)
-            Text("Tap + to create your first counter")
-                .font(.subheadline)
-                .foregroundStyle(Theme.textTertiary)
+    // MARK: - Pager View
+
+    private var pagerView: some View {
+        VStack(spacing: 24) {
+            Spacer()
+
+            CounterPagerView(
+                selectedIndex: $selectedIndex,
+                onNavigateToDetail: { counter in
+                    detailCounter = counter
+                }
+            )
+
+            if viewModel.counters.count > 1 {
+                PageIndicator(
+                    count: viewModel.counters.count,
+                    currentIndex: selectedIndex
+                )
+            }
+
+            Spacer()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
-    private var countersList: some View {
+    // MARK: - List View
+
+    private var listView: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
                 ForEach(Array(viewModel.counters.enumerated()), id: \.element.id) { index, counter in
@@ -99,6 +145,22 @@ struct HomeView: View {
             .padding()
         }
     }
+
+    // MARK: - Empty State
+
+    private var emptyStateView: some View {
+        VStack(spacing: 16) {
+            Text("No counters yet")
+                .font(.headline)
+                .foregroundStyle(Theme.textSecondary)
+            Text("Tap + to create your first counter")
+                .font(.subheadline)
+                .foregroundStyle(Theme.textTertiary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    // MARK: - Limit Sheet
 
     private var limitReachedSheet: some View {
         VStack(spacing: 24) {
